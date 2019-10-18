@@ -6,7 +6,7 @@ import requests
 from settings.base import BASE_DIR
 from apps.competition.models import BetfairSession
 
-LOG = logging.getLogger('betfair.session')
+LOG = logging.getLogger(__name__)
 
 LOGIN_URI = 'https://identitysso-cert.betfair.com/api/certlogin'
 KEEPALIVE_URI = 'https://identitysso.betfair.com/api/keepAlive'
