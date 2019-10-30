@@ -30,6 +30,7 @@ PREREQUISITE_APPS = [
 ]
 
 PROJECT_APPS = [
+    'apps.betfair',
     'apps.competition'
 ]
 

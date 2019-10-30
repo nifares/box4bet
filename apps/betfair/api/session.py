@@ -21,7 +21,7 @@ def login(user, passwd, app):
     cert = BASE_DIR + '/settings/certs/client.crt'
     key = BASE_DIR + '/settings/certs/client.key'
     req = requests.post(LOGIN_URI, data=payload, cert=(cert, key), headers=headers)
-    if req.status_code == 200:
+    if req.status_code == 200 and 'sessionToken' in req.json():
         return req.json()['sessionToken']
     LOG.error('could not create session token: %s', req.json())
     return False
@@ -61,5 +61,4 @@ def get_token(user, passwd, app):
         session.save()
         return token
     else:
-        LOG.error('could not create session token')
         return None

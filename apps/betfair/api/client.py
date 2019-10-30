@@ -1,8 +1,9 @@
 """ TODO """
 import logging
 import requests
-from apps.betfair import session
-from apps.betfair import filters
+from django.conf import settings
+from apps.betfair.api import session
+from apps.betfair.api import filters
 
 LOG = logging.getLogger(__name__)
 API_URI = 'https://api.betfair.com/exchange/betting/rest/v1.0/'
@@ -57,7 +58,7 @@ class BetfairApi(object):
         payload = filters.market(competition_ids=competition_ids)
         return self.call('listEvents/', payload)
 
-    def list_market_catalogue(self, event_ids):
+    def list_market_catalogue(self, event_ids, max_results):
         """
         :param list event_ids: list of eventIds.
 
@@ -67,8 +68,8 @@ class BetfairApi(object):
             event_ids=event_ids,
             market_type_codes=['MATCH_ODDS', 'DOUBLE_CHANCE'],
             attributes={
-                'maxResults': 2,
-                'marketProjection': ['RUNNER_DESCRIPTION']
+                'maxResults': max_results,
+                'marketProjection': ['RUNNER_DESCRIPTION', 'EVENT', 'RUNNER_METADATA']
             }
         )
         return self.call('listMarketCatalogue/', payload)
@@ -81,3 +82,9 @@ class BetfairApi(object):
         """
         payload = filters.market(attributes={'marketIds': market_ids})
         return self.call('listMarketBook/', payload)
+
+def api_client():
+    return BetfairApi(settings.BETFAIR_APP,
+                      settings.BETFAIR_APP_KEY,
+                      settings.BETFAIR_USER,
+                      settings.BETFAIR_PASSWORD)
