@@ -4,7 +4,7 @@ Session manager
 import logging
 import requests
 from settings.base import BASE_DIR
-from apps.competition.models import BetfairSession
+from apps.betfair.models import BetfairSession
 
 LOG = logging.getLogger(__name__)
 

@@ -4,13 +4,9 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class BetfairSession(models.Model):
-    session_token = models.CharField(max_length=500)
-    active = models.BooleanField(default=False)
-
 class CompetitionKind(models.Model):
     name = models.CharField(max_length=100)
-    betfair_id = models.BigIntegerField()
+    betfair_id = models.BigIntegerField(unique=True)
     enabled = models.BooleanField(default=False)
 
 class Competition(models.Model):
