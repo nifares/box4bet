@@ -14,10 +14,11 @@ def get_competition_kinds():
     api = api_client()
     kinds = api.list_event_types()
     for kind in kinds:
-        entry = CompetitionKind(
+        obj, created = CompetitionKind.objects.get_or_create(
             name=kind['eventType']['name'],
             betfair_id=kind['eventType']['id'])
-        entry.save()
+        if created:
+            LOG.info('created competition kind - %s', obj.name)
 
 def get_competitions():
     """
@@ -28,7 +29,8 @@ def get_competitions():
     """
     api = api_client()
     for kind in CompetitionKind.objects.filter(enabled=True):
-        competitions = api.list_competitions([kind.id])
+        LOG.info('pulling competitions of kind - %s', kind.name)
+        competitions = api.list_competitions([kind.betfair_id])
         for competition in competitions:
             obj, created = Competition.objects.get_or_create(
                 name=competition['competition']['name'],
