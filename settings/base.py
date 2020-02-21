@@ -134,3 +134,8 @@ LOGGING = {
         }
     }
 }
+
+# Configuration
+
+# Minutes before event start time to be locked
+LOCK_BEFORE = 30
