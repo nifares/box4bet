@@ -36,15 +36,18 @@ def keep_alive(session_token):
     if req.status_code == 200 and req.json()['status'] == 'SUCCESS':
         return True
     LOG.warning('token is not valid anymore, could not keepAlive')
+    LOG.debug(f'response: {req.json()}')
     return False
 
 def current_token():
     """ TODO """
-    active = BetfairSession.objects.filter(active=True).first()
-    if active:
-        LOG.debug('checking if session token [%.5s] is still valid', active.session_token)
-        if keep_alive(active.session_token):
-            return active.session_token
+    session = BetfairSession.objects.filter(active=True).first()
+    if session:
+        LOG.debug('checking if session token [%.5s] is still valid', session.session_token)
+        if keep_alive(session.session_token):
+            return session.session_token
+        session.active =  False
+        session.save()
     return False
 
 def get_token(user, passwd, app):
