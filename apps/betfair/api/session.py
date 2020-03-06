@@ -36,7 +36,7 @@ def keep_alive(session_token):
     if req.status_code == 200 and req.json()['status'] == 'SUCCESS':
         return True
     LOG.warning('token is not valid anymore, could not keepAlive')
-    LOG.debug(f'response: {req.json()}')
+    LOG.debug('response: %s', req.json())
     return False
 
 def current_token():
