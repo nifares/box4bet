@@ -14,31 +14,35 @@ def get_odds():
     """
     api = api_client()
     event_list = get_event_list(api)
-    odds_list = fetch_odds(api, event_list)
-    count = 0
-    for event_id, event in event_list.items():
-        try:
-            obj = Event.objects.get(betfair_id=event_id)
-            for odd in event['odds']:
-                odd_obj, created = Odd.objects.update_or_create(
-                    event=obj,
-                    betfair_id=odd['selectionId'],
-                    defaults={
-                        'prize': odds_list[odd['marketId']][odd['selectionId']],
-                        'name': name_odd(obj, odd['runnerName']),
-                        'betfair_name': odd['runnerName']
-                    }
-                )
-                action = 'created' if created else 'updated'
-                count += 1
-                LOG.debug('%s odds for %s event - %s [%s]',
-                          action,
-                          obj.name,
-                          odd_obj.prize,
-                          odd_obj.name)
-        except ObjectDoesNotExist:
-            LOG.error('event with betfair_id=%s does not exist in database', event_id)
-    LOG.info('updated/created %d odds', count)
+    if event_list:
+        odds_list = fetch_odds(api, event_list)
+        count = 0
+        for event_id, event in event_list.items():
+            try:
+                obj = Event.objects.get(betfair_id=event_id)
+                for odd in event['odds']:
+                    odd_obj, created = Odd.objects.update_or_create(
+                        event=obj,
+                        betfair_id=odd['selectionId'],
+                        defaults={
+                            'prize': odds_list[odd['marketId']][odd['selectionId']],
+                            'name': name_odd(obj, odd['runnerName']),
+                            'betfair_name': odd['runnerName']
+                        }
+                    )
+                    action = 'created' if created else 'updated'
+                    count += 1
+                    LOG.debug('%s odds for [%s] %s event - %s [%s]',
+                              action,
+                              obj.betfair_id,
+                              obj.name,
+                              odd_obj.prize,
+                              odd_obj.name)
+            except ObjectDoesNotExist:
+                LOG.error('event with betfair_id=%s does not exist in database', event_id)
+        LOG.info('updated/created %d odds', count)
+    else:
+        LOG.info('no events to fetch odds for')
 
 def get_event_list(api):
     """
@@ -46,8 +50,10 @@ def get_event_list(api):
     return parsed event list with details
     """
     event_ids = list(x.betfair_id for x in Event.objects.filter(locked=False).all())
-    markets = api.list_market_catalogue(event_ids, len(event_ids)*2)
-    return parse_markets(markets)
+    if event_ids:
+        markets = api.list_market_catalogue(event_ids, len(event_ids)*2)
+        return parse_markets(markets)
+    return None
 
 def parse_markets(markets):
     """
