@@ -4,7 +4,7 @@ Odd jobs
 import logging
 from django.core.exceptions import ObjectDoesNotExist
 from apps.betfair.api.client import api_client
-from apps.competition.models import Event, Odd
+from apps.box4bet.models import Event, Odd
 
 LOG = logging.getLogger(__name__)
 

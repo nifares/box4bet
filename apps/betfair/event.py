@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 from pytz import timezone
 from apps.betfair.api.client import api_client
-from apps.competition.models import Competition, Event
+from apps.box4bet.models import Competition, Event
 from django.conf import settings
 
 LOG = logging.getLogger(__name__)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.competition.models import CompetitionKind, Competition, Event, Odd
+from apps.box4bet.models import CompetitionKind, Competition, Event, Odd
 
 # Register your models here.
 

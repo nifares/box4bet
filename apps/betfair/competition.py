@@ -3,7 +3,7 @@ Competitions module
 """
 import logging
 from apps.betfair.api.client import api_client
-from apps.competition.models import Competition, CompetitionKind
+from apps.box4bet.models import Competition, CompetitionKind
 
 LOG = logging.getLogger(__name__)
 

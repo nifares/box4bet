@@ -31,7 +31,8 @@ PREREQUISITE_APPS = [
 
 PROJECT_APPS = [
     'apps.betfair',
-    'apps.competition'
+    'apps.box4bet',
+    'django_extensions'
 ]
 
 INSTALLED_APPS = PREREQUISITE_APPS + PROJECT_APPS
@@ -103,6 +104,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Logging
 
@@ -116,7 +118,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'console',
         },
@@ -131,6 +133,11 @@ LOGGING = {
             'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False
+        },
+        'apps': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            'propagate': True
         }
     }
 }
