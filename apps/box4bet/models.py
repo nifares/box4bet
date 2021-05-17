@@ -8,6 +8,8 @@ class CompetitionKind(models.Model):
     name = models.CharField(max_length=100)
     betfair_id = models.BigIntegerField(unique=True)
     enabled = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name
 
 class Competition(models.Model):
     name = models.CharField(max_length=100)
@@ -17,6 +19,8 @@ class Competition(models.Model):
     fee_currency = models.CharField(max_length=3, default='CBL')
     betfair_id = models.BigIntegerField(unique=True)
     enabled = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -32,6 +36,8 @@ class Event(models.Model):
     live = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
     betfair_id = models.BigIntegerField(unique=True)
+    def __str__(self):
+        return self.name
 
 class Odd(models.Model):
     name = models.CharField(max_length=100)
@@ -44,8 +50,12 @@ class Odd(models.Model):
         constraints = [
             UniqueConstraint(fields=['event', 'betfair_id'], name='unique_betfair_id_event')
         ]
+    def __str__(self):
+        return self.name    
 
 class Score(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.FloatField()
+    def __str__(self):
+        return self.competition
