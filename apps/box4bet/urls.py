@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import home, events
-
+import apps.box4bet.views as views
 urlpatterns = [
-    path('', home),
-    path('events', events)
+    path('', views.home),
+    path('events', views.events_view),
+    path('events/<int:event_id>', views.event)
 ]

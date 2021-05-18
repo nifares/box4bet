@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+{{event.name}}
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Odd</th>
+            <th scope="col">Prize</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for odd in event.odd_set.all %}
+        <tr>
+            <td>{{odd.name}}</td>
+            <td>{{odd.prize}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
