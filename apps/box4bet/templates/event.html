@@ -6,13 +6,30 @@
         <tr>
             <th scope="col">Odd</th>
             <th scope="col">Prize</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for odd in event.odd_set.all %}
         <tr>
-            <td>{{odd.name}}</td>
+            <td>
+                {{odd.name}}<span class="badge bg-info text-dark"></span>
+            </td>
             <td>{{odd.prize}}</td>
+            <td>
+                <form action="/events/{{event.id}}/bet" method="post">
+                    {% csrf_token %}
+                    {% if odd.id == user_bet %}
+                        <button name="odd" value={{odd.id}} type="submit" class="btn btn-success btn-sm" disabled>
+                            <i class="bi bi-patch-check-fill"></i>
+                        </button>
+                    {% else %}
+                        <button name="odd" value={{odd.id}} type="submit" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-plus-square"></i>
+                        </button>
+                    {% endif %}
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

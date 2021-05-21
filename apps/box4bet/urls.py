@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('events', views.events_view),
     path('events/<int:event_id>', views.event),
+    path('events/<int:event_id>/bet', views.bet),
     path('accounts/', include("django.contrib.auth.urls")),
     path('register/', views.register, name="register")
 ]

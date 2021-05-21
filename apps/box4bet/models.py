@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import constraints
 from django.db.models.constraints import UniqueConstraint
 from django.contrib.auth.models import User
 
@@ -44,6 +45,7 @@ class Odd(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     prize = models.FloatField(null=True)
     winner = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
     betfair_id = models.BigIntegerField()
     betfair_name = models.CharField(max_length=100)
     class Meta:
@@ -59,3 +61,13 @@ class Score(models.Model):
     score = models.FloatField()
     def __str__(self):
         return self.competition
+
+
+class Bet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    odd = models.ForeignKey(Odd, on_delete=models.CASCADE)
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user', 'event'], name='unique_bet_per_event')
+        ]
