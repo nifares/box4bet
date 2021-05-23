@@ -23,7 +23,7 @@ def event(request, event_id):
         'event': Event.objects.get(pk=event_id),
     }
     if request.user.is_authenticated:
-        data['user_bet'] = request.user.bet_set.get_or_none(event=event_id).odd.id
+        data['user_bet'] = request.user.bet_set.filter(event=event_id).first()
     return render(request, 'event.html', data)
 
 def register(request):

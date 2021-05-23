@@ -19,7 +19,7 @@
             <td>
                 <form action="/events/{{event.id}}/bet" method="post">
                     {% csrf_token %}
-                    {% if odd.id == user_bet %}
+                    {% if odd.id == user_bet.odd.id %}
                         <button name="odd" value={{odd.id}} type="submit" class="btn btn-success btn-sm" disabled>
                             <i class="bi bi-patch-check-fill"></i>
                         </button>
