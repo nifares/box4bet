@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 {{event.name}}
-<table class="table table-dark table-striped">
+<table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">Odd</th>
             <th scope="col">Prize</th>
+            {% if user.is_authenticated %}
             <th scope="col"></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
         {% for odd in event.odd_set.all %}
+        {% if odd.prize %}
         <tr>
             <td>
                 {{odd.name}}<span class="badge bg-info text-dark"></span>
             </td>
             <td>{{odd.prize}}</td>
+            {% if user.is_authenticated %}
             <td>
                 <form action="/events/{{event.id}}/bet" method="post">
                     {% csrf_token %}
@@ -30,7 +34,9 @@
                     {% endif %}
                 </form>
             </td>
+            {% endif %}
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>
