@@ -117,3 +117,26 @@ def name_odd(event, name):
         return translate[name]
     except KeyError:
         return name
+
+def decide_winners():
+    for event in Event.objects.filter(finished=True).all():
+        for odd in event.odd_set.all():
+            # draw
+            # winning - Draw, Home or Draw, Draw or Away
+            if event.home_score_90 == event.away_score_90:
+                if odd.name in ['Draw', f'{event.home} or Draw', f'Draw or {event.away}']:
+                    odd.winner = True
+                    odd.save()
+            # home
+            # winning - Home, Home or Draw, Home or Away
+            elif event.home_score_90 > event.away_score_90:
+                if odd.name in [event.home, f'{event.home} or Draw', f'{event.home} or {event.away}']:
+                    odd.winner = True
+                    odd.save()
+            # away
+            # winning - Away, Draw or Away, Home or Away
+            else:
+                if odd.name in [event.away, f'Draw or {event.away}', f'{event.home} or {event.away}']:
+                    odd.winner = True
+                    odd.save()
+            
