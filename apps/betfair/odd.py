@@ -3,8 +3,9 @@ Odd jobs
 """
 import logging
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 from apps.betfair.api.client import api_client
-from apps.box4bet.models import Event, Odd
+from apps.box4bet.models import Competition, Event, Odd, Score
 
 LOG = logging.getLogger(__name__)
 
@@ -139,4 +140,18 @@ def decide_winners():
                 if odd.name in [event.away, f'Draw or {event.away}', f'{event.home} or {event.away}']:
                     odd.winner = True
                     odd.save()
-            
+
+def calculate_score():
+    c = Competition.objects.get(name='UEFA Euro 2020')
+    for user in User.objects.all():
+        score = 0
+        for bet in user.bet_set.all():
+            if bet.odd.winner:
+                score += bet.odd.prize
+        obj, created = Score.objects.update_or_create(
+            user = user,
+            competition = c,
+            defaults = {
+                'score': score
+            }
+        )

@@ -60,7 +60,7 @@ class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.FloatField()
     def __str__(self):
-        return self.competition
+        return f'{self.user.username} - {self.score}'
 
 
 class Bet(models.Model):
