@@ -3,7 +3,7 @@ Session manager
 """
 import logging
 import requests
-from settings.base import BASE_DIR
+from django.conf import settings
 from apps.betfair.models import BetfairSession
 
 LOG = logging.getLogger(__name__)
@@ -18,8 +18,8 @@ def login(user, passwd, app):
         'X-Application': app,
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-    cert = '/certs/tls.crt'
-    key = '/certs/tls.key'
+    cert = settings.CERTS_PATH + 'tls.crt'
+    key = settings.CERTS_PATH + 'tls.key'
     req = requests.post(LOGIN_URI, data=payload, cert=(cert, key), headers=headers)
     if req.status_code == 200 and 'sessionToken' in req.json():
         return req.json()['sessionToken']

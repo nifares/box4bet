@@ -122,22 +122,17 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'console',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/data/box4bet.log',
-        },
+        }
     },
     'loggers': {
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': False
         },
         'apps': {
             'level': 'INFO',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True
         }
     }
