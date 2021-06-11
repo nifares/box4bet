@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login
 from django.contrib import messages
-from apps.box4bet.models import Event, Bet, Odd
+from apps.box4bet.models import Event, Bet, Odd, Score
 from apps.box4bet.forms import CustomUserCreationForm
 
 LOG = logging.getLogger(__name__)
@@ -76,3 +76,9 @@ def bet(request, event_id):
         )
         
     return redirect(f"/events/{event_id}")
+
+def scoreboard(request):
+    data = {
+        'scores': Score.objects.order_by('score').all()
+    }
+    return render(request, 'scoreboard.html', data)
