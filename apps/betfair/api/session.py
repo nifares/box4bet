@@ -18,8 +18,8 @@ def login(user, passwd, app):
         'X-Application': app,
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-    cert = BASE_DIR + '/settings/certs/client.crt'
-    key = BASE_DIR + '/settings/certs/client.key'
+    cert = '/certs/tls.crt'
+    key = '/certs/tls.key'
     req = requests.post(LOGIN_URI, data=payload, cert=(cert, key), headers=headers)
     if req.status_code == 200 and 'sessionToken' in req.json():
         return req.json()['sessionToken']
