@@ -16,7 +16,7 @@ from settings.credentials import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ALLOWED_HOSTS = ['box4bet.nifares.eu']
+ALLOWED_HOSTS = ['box4bet.nifares.eu', '127.0.0.1']
 
 
 # Application definition
@@ -123,16 +123,21 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'console',
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/data/box4bet.log',
+        },
     },
     'loggers': {
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'propagate': False
         },
         'apps': {
             'level': 'INFO',
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'propagate': True
         }
     }
@@ -142,6 +147,7 @@ LOGGING = {
 
 # Minutes before event start time to be locked
 LOCK_BEFORE = 30
+BET_BEFORE = 5
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

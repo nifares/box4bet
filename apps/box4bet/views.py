@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login
@@ -45,9 +46,19 @@ def register(request):
 
 def bet(request, event_id):
     if request.method == "POST" and request.user.is_authenticated:
+        event = Event.objects.get(pk=event_id)
+        now = datetime.now(timezone.utc)
+        diff = int((event.start_time - now).total_seconds())
+        LOG.debug('{} bets on {} - time diff {}'.format(
+            request.user.username,
+            event.name,
+            diff
+        ))
+        if diff <= 300:
+            return redirect(f"/events/{event_id}")
         obj, created = Bet.objects.update_or_create(
             user = request.user,
-            event = Event.objects.get(pk=event_id),
+            event = event,
             defaults = {
                 'odd': Odd.objects.get(pk=request.POST['odd'])
             }
