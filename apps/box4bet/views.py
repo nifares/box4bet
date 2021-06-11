@@ -79,6 +79,6 @@ def bet(request, event_id):
 
 def scoreboard(request):
     data = {
-        'scores': Score.objects.order_by('score').all()
+        'scores': Score.objects.order_by('-score').all()
     }
     return render(request, 'scoreboard.html', data)
