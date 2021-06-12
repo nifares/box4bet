@@ -20,8 +20,13 @@ def events_view(request):
     return render(request, 'events_view.html', data)
 
 def event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    now = datetime.now(timezone.utc)
+    diff = int((event.start_time - now).total_seconds())
+    display_bets = True if diff <= 200 else False
     data = {
-        'event': Event.objects.get(pk=event_id),
+        'event': event,
+        'display_bets': display_bets
     }
     if request.user.is_authenticated:
         data['user_bet'] = request.user.bet_set.filter(event=event_id).first()
