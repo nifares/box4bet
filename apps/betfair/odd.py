@@ -136,10 +136,13 @@ def decide_winners():
                     odd.save()
             # away
             # winning - Away, Draw or Away, Home or Away
-            else:
+            elif event.home_score_90 < event.away_score_90:
                 if odd.name in [event.away, f'Draw or {event.away}', f'{event.home} or {event.away}']:
                     odd.winner = True
                     odd.save()
+            else:
+                odd.winner = False
+                odd.save()
 
 def calculate_score():
     c = Competition.objects.get(name='UEFA Euro 2020')
