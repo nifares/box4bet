@@ -151,6 +151,6 @@ def calculate_score():
             user = user,
             competition = c,
             defaults = {
-                'score': score
+                'score': round(score, 2)
             }
         )
