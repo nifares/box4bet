@@ -4,7 +4,7 @@ from apps.betfair.competition import get_competition_kinds, get_competitions
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-    help = 'kurwoooo'
+    help = 'fetches betfair data'
 
     def handle(self, *args, **kwargs):
         get_competition_kinds()
