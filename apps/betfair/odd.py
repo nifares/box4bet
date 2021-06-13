@@ -147,6 +147,7 @@ def calculate_score():
         for bet in user.bet_set.all():
             if bet.odd.winner:
                 score += bet.odd.prize
+                LOG.debug(f'{user.username} won {bet.event.name} with bet on {bet.odd.name} + {bet.odd.prize}')
         obj, created = Score.objects.update_or_create(
             user = user,
             competition = c,

@@ -37,15 +37,17 @@ def get_score(event):
     score_site = get_raw_event(event.betfair_id, event.competition.kind.name)
 
     if score_site is not None:
-        home_score = score_site.xpath('//span [@class="home-score ui-score-home"]/text()')[0]
-        away_score = score_site.xpath('//span [@class="away-score ui-score-away"]/text()')[0]
-        match_time = score_site.xpath('//span [@class="time ui-time-stop-format"]/text()')[0]
-
-        LOG.info(f'updating livescore data - {event.home} [{home_score}:{away_score}] {event.away} ( {match_time} )')
-
-        event.home_score = home_score
-        event.away_score = away_score
-        event.save()
+        try:
+            home_score = score_site.xpath('//span [@class="home-score ui-score-home"]/text()')[0]
+            away_score = score_site.xpath('//span [@class="away-score ui-score-away"]/text()')[0]
+            match_time = score_site.xpath('//span [@class="time ui-time-stop-format"]/text()')[0]
+            LOG.info(f'updating livescore data - {event.home} [{home_score}:{away_score}] {event.away} ( {match_time} )')
+            event.home_score = home_score
+            event.away_score = away_score
+            event.save()
+        except Exception as e:
+            LOG.error(f'failed to update livescore for match {event.name}')
+            LOG.error(score_site)
     else:
         LOG.info(f'could not get livescore data for {event.name} [{event.betfair_id}]')
         LOG.info('assuming finished')
@@ -60,6 +62,9 @@ def get_livescores():
     TODO
     """
     now = datetime.now(tz=timezone('GMT'))
-    events = Event.objects.filter(finished=False).filter(start_time__lt=now).all()
+    events = Event.objects.filter(finished=False, live=False).filter(start_time__lt=now).all()
     for event in events:
+        event.live = True
+        event.save()
+    for event in Event.objects.filter(live=True).all():
         get_score(event)
