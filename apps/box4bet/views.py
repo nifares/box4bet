@@ -11,7 +11,12 @@ LOG = logging.getLogger(__name__)
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html', {} )
+    data = {
+        'live_events': Event.objects.filter(live=True).order_by('start_time').all(),
+        'upcoming_events': Event.objects.filter(live=False, finished=False).order_by('start_time').all()[:5],
+        'finished_events': Event.objects.filter(live=False, finished=True).order_by('start_time').all()[:5]
+    }
+    return render(request, 'events_view.html', data )
 
 def events_view(request):
     
@@ -24,12 +29,8 @@ def events_view(request):
 
 def event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    now = datetime.now(timezone.utc)
-    diff = int((event.start_time - now).total_seconds())
-    display_bets = True if diff <= 200 else False
     data = {
-        'event': event,
-        'display_bets': display_bets
+        'event': event
     }
     if request.user.is_authenticated:
         data['user_bet'] = request.user.bet_set.filter(event=event_id).first()

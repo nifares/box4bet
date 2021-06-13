@@ -4,104 +4,13 @@
 {% load tz %}
 {% timezone "Europe/Warsaw" %}
 {% if live_events %}
-<div class="card border-dark mb-4 bg-transparent" style="width: 90%;">
-    <div class="card-header">Live events</div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Event</th>
-                <th scope="col">Start Time</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for event in live_events %}
-            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
-                <td>
-                    {{event.name}}
-                    {% if event.locked and not event.finished %}
-                    <span class="badge bg-danger">Locked</span>
-                    {% endif %}
-                    {% if event.finished %}
-                    <span class="badge bg-secondary">Finished</span>
-                    {% endif %}
-                    {% user_bet event user as bet %}
-                    {% if bet %}
-                    <span class="badge bg-info">{{ bet }}</span>
-                    {% endif%}
-                </td>
-                <td>{{event.start_time}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% include "events_card/with_score.html" with events=live_events name='Live events' %}
 {% endif %}
 {% if upcoming_events %}
-<div class="card mb-4 border-dark bg-transparent" style="width: 90%;">
-    <div class="card-header">Upcoming events</div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Event</th>
-                <th scope="col">Start Time</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for event in upcoming_events %}
-            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
-                <td>
-                    {{event.name}}
-                    {% if event.odds_locked and not event.finished %}
-                    <span class="badge bg-warning">Locking soon</span>
-                    {% endif %}
-                    {% if event.finished %}
-                    <span class="badge bg-secondary">Finished</span>
-                    {% endif %}
-                    {% user_bet event user as bet %}
-                    {% if bet %}
-                    <span class="badge bg-info">{{ bet }}</span>
-                    {% endif%}
-                </td>
-                <td>{{event.start_time}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% include "events_card/with_start_time.html" with events=upcoming_events name='Upcoming events' %}
 {% endif %}
 {% if finished_events %}
-<div class="card mb-4 border-dark bg-transparent" style="width: 90%;">
-    <div class="card-header"> Finished events</div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Event</th>
-                <th scope="col">Score</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for event in finished_events %}
-            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
-                <td>
-                    {{event.name}}
-                    {% if event.finished %}
-                    <span class="badge bg-secondary">Finished</span>
-                    {% endif %}
-                    {% user_bet event user as bet %}
-                    {% if bet %}
-                    <span class="badge bg-info">{{ bet }}</span>
-                    {% endif %}
-                    {% bet_reward event user as reward %}
-                    {% if reward %}
-                    <span class="badge bg-success">+{{ reward }}</span>
-                    {% endif %}
-                </td>
-                <td>{{event.home_score}}:{{event.away_score}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% include "events_card/with_score.html" with events=finished_events name='Finished events' %}
 {% endif %}
 {% endtimezone %}
 {% endblock %}

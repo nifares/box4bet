@@ -1,0 +1,32 @@
+{% load event_extras %}
+<div class="card mb-4 border-dark bg-transparent" style="width: 60%;">
+    <div class="card-header">{{ name }}</div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Start Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
+                <td>
+                    {{event.name}}
+                    {% if event.odds_locked and not event.locked %}
+                    <span class="badge bg-warning">Locking soon</span>
+                    {% endif %}
+                    {% if event.locked %}
+                    <span class="badge bg-danger">Locked</span>
+                    {% endif %}
+                    {% user_bet event user as bet %}
+                    {% if bet %}
+                    <span class="badge bg-info">{{ bet }}</span>
+                    {% endif%}
+                </td>
+                <td>{{event.start_time}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

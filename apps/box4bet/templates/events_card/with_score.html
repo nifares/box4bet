@@ -1,0 +1,36 @@
+{% load event_extras %}
+<div class="card border-dark mb-4 bg-transparent" style="width: 60%;">
+    <div class="card-header">{{ name }}</div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
+                <td>
+                    {{event.name}}
+                    {% if event.live %}
+                    <span class="badge bg-success">Live</span>
+                    {% endif %}
+                    {% if event.finished %}
+                    <span class="badge bg-secondary">Finished</span>
+                    {% endif %}
+                    {% user_bet event user as bet %}
+                    {% if bet %}
+                    <span class="badge bg-info">{{ bet }}</span>
+                    {% endif%}
+                    {% bet_reward event user as reward %}
+                    {% if reward %}
+                    <span class="badge bg-success">+{{reward}}</span>
+                    {% endif %}
+                </td>
+                <td>{{event.home_score}}:{{event.away_score}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
