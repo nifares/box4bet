@@ -1,19 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">User</th>
-            <th scope="col">Score</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for score in scores %}
-        <tr>
-            <td>{{score.user.username}}</td>
-            <td>{{score.score}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="card border-dark bg-transparent" style="width: 90%;">
+    <div class="card-header">Scoreboard</div>
+        <table class="table table-stripped">
+            <thead>
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td>{{score.user.username}}</td>
+                    <td>{{score.score}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
