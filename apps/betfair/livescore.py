@@ -37,17 +37,16 @@ def get_score(event):
     score_site = get_raw_event(event.betfair_id, event.competition.kind.name)
 
     if score_site is not None:
+        home_score = score_site.xpath('//span [@class="home-score ui-score-home"]/text()')[0]
+        away_score = score_site.xpath('//span [@class="away-score ui-score-away"]/text()')[0]
         try:
-            home_score = score_site.xpath('//span [@class="home-score ui-score-home"]/text()')[0]
-            away_score = score_site.xpath('//span [@class="away-score ui-score-away"]/text()')[0]
             match_time = score_site.xpath('//span [@class="time ui-time-stop-format"]/text()')[0]
-            LOG.info(f'updating livescore data - {event.home} [{home_score}:{away_score}] {event.away} ( {match_time} )')
-            event.home_score = home_score
-            event.away_score = away_score
-            event.save()
-        except Exception as e:
-            LOG.error(f'failed to update livescore for match {event.name}')
-            LOG.error(score_site)
+        except:
+            match_time = 'n/a'
+        LOG.info(f'updating livescore data - {event.home} [{home_score}:{away_score}] {event.away} ( {match_time} )')
+        event.home_score = home_score
+        event.away_score = away_score
+        event.save()
     else:
         LOG.info(f'could not get livescore data for {event.name} [{event.betfair_id}]')
         LOG.info('assuming finished')
