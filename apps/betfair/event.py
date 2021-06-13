@@ -4,6 +4,7 @@ Competitions module
 import logging
 import re
 from datetime import datetime
+from datetime import timezone as tz
 from pytz import timezone
 from apps.betfair.api.client import api_client
 from apps.box4bet.models import Competition, Event
@@ -32,14 +33,13 @@ def get_events():
                     away=match.group(2),
                     defaults={
                         'start_time': start_time,
-                        'locked': locked
+                        'odds_locked': locked
                     }
                 )
                 if created:
-                    LOG.info('created event - %s - starts %s [locked: %s]', obj.name, obj.start_time, obj.locked)
+                    LOG.info('created event - %s - starts %s [odds_locked: %s]', obj.name, obj.start_time, obj.locked)
                 else:
-                    LOG.debug('updated event - %s - starts %s [locked: %s]', obj.name, obj.start_time, obj.locked)
-
+                    LOG.debug('updated event - %s - starts %s [odds_locked: %s]', obj.name, obj.start_time, obj.locked)
 
 def parse_time(open_date):
     """
@@ -59,3 +59,11 @@ def parse_time(open_date):
         locked = False
 
     return locked, start_time
+
+def lock_events():
+    for event in Event.objects.filter(live=False, finished=False).all():
+        now = datetime.now(tz.utc)
+        diff = int((event.start_time - now).total_seconds())
+        if diff <= 300:
+            event.locked = True
+            event.save()

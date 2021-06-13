@@ -49,7 +49,10 @@ def get_score(event):
     else:
         LOG.info(f'could not get livescore data for {event.name} [{event.betfair_id}]')
         LOG.info('assuming finished')
+        event.home_score_90 = event.home_score
+        event.away_score_90 = event.away_score
         event.finished = True
+        event.live = False
         event.save()
 
 def get_livescores():

@@ -50,7 +50,7 @@ def get_event_list(api):
     Go through all events in database to fetach their markets
     return parsed event list with details
     """
-    event_ids = list(x.betfair_id for x in Event.objects.filter(locked=False).all())
+    event_ids = list(x.betfair_id for x in Event.objects.filter(odds_locked=False).all())
     if event_ids:
         markets = api.list_market_catalogue(event_ids, len(event_ids)*2)
         return parse_markets(markets)

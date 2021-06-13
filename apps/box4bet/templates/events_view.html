@@ -51,8 +51,8 @@
             <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
                 <td>
                     {{event.name}}
-                    {% if event.locked and not event.finished %}
-                    <span class="badge bg-danger">Locked</span>
+                    {% if event.odds_locked and not event.finished %}
+                    <span class="badge bg-warning">Locking soon</span>
                     {% endif %}
                     {% if event.finished %}
                     <span class="badge bg-secondary">Finished</span>

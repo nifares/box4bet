@@ -34,6 +34,7 @@ class Event(models.Model):
     away_score = models.IntegerField(null=True)
     away_score_90 = models.IntegerField(null=True)
     locked = models.BooleanField(default=False)
+    odds_locked = models.BooleanField(default=False)
     live = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
     betfair_id = models.BigIntegerField(unique=True)
