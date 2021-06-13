@@ -1,45 +1,46 @@
 {% extends "base.html" %}
+{% load event_extras %}
 {% block content %}
 {{event.name}}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Odd</th>
-            <th scope="col">Prize</th>
-            {% if user.is_authenticated %}
-            <th scope="col"></th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for odd in event.odd_set.all %}
-        {% if odd.prize %}
-        <tr>
-            <td>
-                {{odd.name}}<span class="badge bg-info text-dark"></span>
-            </td>
-            <td>{{odd.prize}}</td>
-            {% if user.is_authenticated %}
-            <td>
-                <form action="/events/{{event.id}}/bet" method="post">
-                    {% csrf_token %}
-                    {% if odd.id == user_bet.odd.id %}
-                        <button name="odd" value={{odd.id}} type="submit" class="btn btn-success btn-sm" disabled>
-                            <i class="bi bi-patch-check-fill"></i>
-                        </button>
-                    {% else %}
-                        <button name="odd" value={{odd.id}} type="submit" class="btn btn-secondary btn-sm">
-                            <i class="bi bi-plus-square"></i>
-                        </button>
+<div class="card mb-3 border-dark bg-transparent">
+    <div class="card-header">Odds</div>
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Prize</th>
+                    {% if user.is_authenticated and not event.locked %}
+                    <th scope="col"></th>
                     {% endif %}
-                </form>
-            </td>
-            {% endif %}
-        </tr>
-        {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
+                </tr>
+            </thead>
+            <tbody>
+                {% user_bet event user as bet %}
+                {% for odd in event.odd_set.all %}
+                {% if odd.prize %}
+                <tr>
+                    <td>
+                        {{odd.name}}
+                        {% if bet == odd.name %}
+                        <span class="badge bg-info text-dark">Your bet</span>
+                        {% endif %}
+                    </td>
+                    <td>{{odd.prize}}</td>
+                    {% if user.is_authenticated and not event.locked %}
+                    <td>
+                        <form action="/events/{{event.id}}/bet" method="post">
+                            {% csrf_token %}
+                            <button name="odd" value={{odd.id}} type="submit" class="btn btn-outline-info btn-sm">Place bet</button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% if display_bets %}
 <table class="table table-striped">
     <thead>
