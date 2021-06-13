@@ -1,21 +1,66 @@
 {% extends "base.html" %}
 {% block content %}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Match</th>
-            <th scope="col">Start Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for event in events %}
-        <tr>
-            <td>
-                <a href="/events/{{event.id}}">{{event.name}}</a>
-            </td>
-            <td>{{event.start_time}}</td>
-        </tr>
+{% if live_events %}
+<div class="card mb-3">
+    <div class="card-header">Live events</div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Start Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in live_events %}
+            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
+                <td>{{event.name}}</td>
+                <td>{{event.start_time}}</td>
+            </tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% if upcoming_events %}
+<div class="card mb-3">
+    <div class="card-header">Upcoming events</div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Start Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in upcoming_events %}
+            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
+                <td>{{event.name}}</td>
+                <td>{{event.start_time}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% if finished_events %}
+<div class="card mb-3">
+    <div class="card-header"> Finished events</div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Start Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event in finished_events %}
+            <tr class="clickable-table-row" onclick="document.location = '/events/{{event.id}}';">
+                <td>{{event.name}}</td>
+                <td>{{event.start_time}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 {% endblock %}

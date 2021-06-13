@@ -14,8 +14,11 @@ def home(request):
     return render(request, 'home.html', {} )
 
 def events_view(request):
+    
     data = {
-        'events': Event.objects.order_by('start_time').all()
+        'live_events': Event.objects.filter(live=True).order_by('start_time').all(),
+        'upcoming_events': Event.objects.filter(live=False, finished=False).order_by('start_time').all(),
+        'finished_events': Event.objects.filter(live=False, finished=True).order_by('start_time').all()
     }
     return render(request, 'events_view.html', data)
 

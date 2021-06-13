@@ -1,58 +1,68 @@
 {% load static %}
-<!-- Bootstrap Core CSS -->
-<link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
-<link href="{% static 'bootstrap/css/bootstrap-icons.css' %}" rel="stylesheet">
-<!-- Bootstrap Core JavaScript -->
-<script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
-
-<div class="container-fluid overflow-hidden">
-    <div class="row vh-100 overflow-auto">
-        <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-dark d-flex sticky-top">
-            <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
-                <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5">B<span class="d-none d-sm-inline">ox4bet</span></span>
-                </a>
-                <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
-                    <li>
-                        <a href="/events" class="nav-link px-sm-0 px-2">
-                            <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Events</span></a>
-                    </li>
-                    <li>
-                        <a href="/scoreboard" class="nav-link px-sm-0 px-2">
-                            <i class="bi bi-trophy"></i><span class="ms-1 d-none d-sm-inline">Scoreboard</span></a>
-                    </li>
-                </ul>
-                {% if user.is_authenticated %}
-                <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-emoji-sunglasses"></i>
-                        <span class="d-none d-sm-inline mx-1">{{ user.username }}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
-                    </ul>
+<html>
+    <head>
+        <!-- Bootstrap Core CSS -->
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'bootstrap/css/bootstrap-icons.css' %}" rel="stylesheet">
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+        <!-- Box4Bet Core CSS and JS-->
+        <link href="{% static 'css/box4bet.css' %}" rel="stylesheet">
+        <script src="{% static 'js/box4bet.js' %}"></script>
+    </head>
+    <body>
+        <div class="container-fluid overflow-hidden">
+            <div class="row vh-100 overflow-auto">
+                <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-dark d-flex sticky-top">
+                    <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
+                        <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <span class="fs-5">B<span class="d-none d-sm-inline">ox4bet</span></span>
+                        </a>
+                        <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="/" class="nav-link px-sm-0 px-2">
+                                    <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/events" class="nav-link px-sm-0 px-2">
+                                    <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Events</span></a>
+                            </li>
+                            <li>
+                                <a href="/scoreboard" class="nav-link px-sm-0 px-2">
+                                    <i class="fs-5 bi-trophy"></i><span class="ms-1 d-none d-sm-inline">Scoreboard</span></a>
+                            </li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-emoji-sunglasses"></i>
+                                <span class="d-none d-sm-inline mx-1">{{ user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
                 </div>
-                {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-                {% endif %}
+                <div class="col d-flex flex-column h-100">
+                    <main class="row">
+                        <div class="col pt-4">
+                            {% block content %}
+        		            {% endblock %}
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
-        <div class="col d-flex flex-column h-sm-100">
-            <main class="row overflow-auto">
-                <div class="col pt-4">
-                    {% block content %}
-		            {% endblock %}
-                </div>
-            </main>
-            <footer class="row bg-light py-4 mt-auto">
-                <div class="col">ElNifares</div>
-            </footer>
-        </div>
-    </div>
-</div>
+    </body>
+</html>
